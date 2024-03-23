@@ -1,0 +1,53 @@
+.app-layout {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+
+    .left-side-container{
+        width: 100%;
+        max-width: 35rem;
+        overflow-y: scroll;
+
+        &::-webkit-scrollbar {
+            width: 1px;
+        }
+
+        input:focus-visible {
+            border: none;
+            outline: none;
+        }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+        -moz-appearance: textfield;
+}
+
+    }
+
+    .right-side-ludo-icon{
+        width: 100%;
+        border-left: 4px solid #A5A5A5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-image: url('./assets/background-image.jpg');
+
+        .icon-container {
+            width: 30rem;
+            height: 30rem;
+
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+    }
+
+}
