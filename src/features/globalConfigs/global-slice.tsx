@@ -1,22 +1,32 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 interface globalConfig {
-    isAppLoading:boolean
+    userAuth:boolean,
+	walletBalnceState: any,
+	userObjectState: any,
 }
 
 const initialState: globalConfig = {
-	isAppLoading:false,
+	userAuth:true,
+	walletBalnceState: {},
+	userObjectState: {},
 }
 
 const globalConfigs = createSlice({
 	name: "globalStates",
 	initialState,
 	reducers: {
-        setAlertVisible:(state,action)=>{
-            state.isAppLoading=action.payload
+        setUserAuth:(state,action)=>{
+            state.userAuth=action.payload;
+        },
+		setWalletBalnceState:(state,action)=>{
+            state.walletBalnceState=action.payload;
+        },
+		setUserObjectState:(state,action)=>{
+            state.userObjectState=action.payload;
         },
 	},
 })
 
-export const { setAlertVisible } = globalConfigs.actions
+export const { setUserAuth, setWalletBalnceState, setUserObjectState } = globalConfigs.actions
 export default globalConfigs.reducer

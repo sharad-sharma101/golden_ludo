@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Home from "../pages/Home";
 import Login from "../pages/Login"
@@ -13,6 +13,9 @@ import PeneltyHistory from "../pages/SidebarPages/PeneltyHistory";
 import ReffralHistory from "../pages/SidebarPages/ReffralHistory";
 import TransactionHistory from "../pages/SidebarPages/TransactionHistory";
 import SupportPage from "../pages/SidebarPages/support";
+import ReferAndEarnPage from "../pages/SidebarPages/ReferAndEarnPage";
+import ProfilePage from "../pages/SidebarPages/ProfilePage";
+import { checkForTokenApi } from "../api/login";
 
 const AUTH_ROUTES = [
     { path: '/wallet', ele: <Wallet/> },
@@ -26,6 +29,8 @@ const AUTH_ROUTES = [
     { path: '/history/reffral', ele: <ReffralHistory /> },
     { path: '/history/transaction', ele: <TransactionHistory /> },
     { path: '/support', ele: <SupportPage /> },
+    { path: '/profile', ele: <ProfilePage /> },
+    { path: '/refer', ele: <ReferAndEarnPage /> },
 ];
 const ROUTES = [
     { path: '/', ele: <Home/> },

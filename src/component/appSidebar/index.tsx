@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import GoldenLudoIcon from "../../assets/golden-ludo.svg";
 import { useNavigate } from 'react-router-dom';
 import { BarLight, GreyAddIcon, ProfileIcon, RightArrow, WalletIcon } from '../../helper/icons';
+import { useAppSelector } from '../../app/hooks';
 
 interface Props {
   auth: boolean;
@@ -9,14 +10,18 @@ interface Props {
 
 const AppSidebar = ({auth}: Props) => {
  const nav = useNavigate()
- console.log({auth});
- 
+ const { walletBalnceState } = useAppSelector(store => store.features);
  const [openState, setopenState] = useState(true);
  const SidebarContent = [
   {
     title: "My Profile",
-    route: "/battle",
+    route: "/profile",
     key: "myProfile",
+  },
+  {
+    title: "Win Cash",
+    route: "/home",
+    key: "winCase",
   },
   {
     title: "My Wallet",
@@ -35,7 +40,7 @@ const AppSidebar = ({auth}: Props) => {
   },
   {
     title: "Refer & Earn",
-    route: "/home",
+    route: "/refer",
     key: "refer",
   },
   {
@@ -103,7 +108,7 @@ const AppSidebar = ({auth}: Props) => {
               <div className='h-full p-1 pr-0' >
                 <WalletIcon />
               </div>
-              <div className='text-[12px] font-medium leading-4' >2,070</div>
+              <div className='text-[12px] font-medium leading-4' >{walletBalnceState?.balance || 0}</div>
            </div>
         </div>
         <div className='bg-[rgba(8,8,7,0.04)] flex items-center gap-1 h-[24px] px-1 py-0 rounded-[0px_4px_4px_0px]' ><GreyAddIcon /> </div>

@@ -7,8 +7,8 @@ const Home: React.FC  = () => {
 
   const games = [
     { id: "1", title: "Golden Ludo", subheading: ["100", "500"], icons: LoduIcon},
-    { id: "2",title: "Golden Ludo", subheading: ["100", "500"], icons: LoduIcon},
-    { id: "3", title: "Golden Ludo", subheading: ["100", "500"], icons: LoduIcon}
+    { id: "2",title: "Golden Ludo", subheading: ["500", "50,000"], icons: LoduIcon},
+    { id: "3", title: "Snake Ladder", subheading: ["100", "500"], icons: LoduIcon}
   ]
   const FOOTER_LINKS = [
     { id: 1, title: "About", link: "/home" },
