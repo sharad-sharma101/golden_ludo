@@ -3,23 +3,23 @@ const CancleModal = () => {
     const CANCLE_OPTION = [
         {
             id: "101",
-            text: "mazza nahi aaya",
+            text: "No Room Code",
         },
         {
             id: "102",
-            text: "mazza nahi aaya",
+            text: "Room Code in Popular Mode",
         },
         {
             id: "103",
-            text: "mazza nahi aaya",
+            text: "Game Not Started",
         },
         {
             id: "104",
-            text: "mazza nahi aaya",
+            text: "Not Joined",
         },
         {
             id: "105",
-            text: "mazza nahi aaya",
+            text: "Not Played",
         },
     ]
 

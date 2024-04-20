@@ -1,20 +1,44 @@
+import { useEffect, useState } from 'react';
+import { fetchTransitionApi } from '../../../api/transition';
 import HistoryCard from '../../../component/HistoryCard';
 import { MoneyIcon } from '../../../helper/icons';
+import { useAppSelector } from '../../../app/hooks';
 
 const TransactionHistory = () => {
+    const [OngoingBattle, setOngoingBattle] = useState<any[]>([]);
 
-    const OngoingBattle = [
-        {
-            transanction: "DEBITED.",
-            amount: "Rs. 3400",
-            date: '12/03/2024 12:01',
-        },
-        {
-            transanction: "CREDITATE.",
-            amount: "Rs. 2000",
-            date: '08/03/2024 12:01',
-        },
-    ];
+    // const OngoingBattle = [
+    //     {
+    //         transanction: "DEBITED.",
+    //         amount: "Rs. 3400",
+    //         date: '12/03/2024 12:01',
+    //     },
+    //     {
+    //         transanction: "CREDITATE.",
+    //         amount: "Rs. 2000",
+    //         date: '08/03/2024 12:01',
+    //     },
+    // ];
+    const {userObjectState} = useAppSelector(store => store.features);
+
+    async function getAllTransition() {
+        if(Object.keys(userObjectState).length === 0) return;
+        const resp = await fetchTransitionApi(`user=${userObjectState._id}`);
+        if(resp?.data?.results && resp.data.results.length){
+            const newHist: any[] = resp.data.results.map((hist: any) => {
+                return {
+                    transanction: hist?.type,
+                    amount: hist?.amount,
+                    date: hist?.createdAt,
+                }
+            })
+            setOngoingBattle([...newHist]);
+        }
+    }
+    useEffect(() => {
+        getAllTransition();
+    }, [userObjectState])
+    
 
     const CardBody = ({game}: any) => {
         return (

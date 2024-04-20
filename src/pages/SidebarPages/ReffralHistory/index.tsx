@@ -50,11 +50,16 @@ const ReffralHistory = () => {
         <div className=' text-[#080807] text-md font-extrabold leading-5' >Reffral History</div>
     </div>
     <div className='flex flex-col items-start gap-3 w-full px-3' >
-        {
+        {/* {
             OngoingBattle.map((game) => (
                 <HistoryCard Body={<CardBody game={game} />} Header={<CardHeader game={game} />} />
             ))
-        }
+        } */}
+         <div className="flex justify-center items-center">
+        <img className="w-64 h-64"
+          src="https://res.cloudinary.com/daqsjyrgg/image/upload/v1690257804/jjqw2hfv0t6karxdeq1s.svg"
+          alt="image empty states"/>
+      </div>
     </div>
 </div>
   )

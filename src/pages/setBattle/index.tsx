@@ -1,22 +1,31 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { createBattleApi } from '../../api/battle';
+import { checkBattleSessionApi, createBattleApi } from '../../api/battle';
 import { useAppSelector } from '../../app/hooks';
 
 const SetBattle = () => {
   const nav = useNavigate();
   const url = location.search;
   const [value, amount ] = url.split('=');
+  const [loading, setloading] = useState(false)
   const [battleCode, setbattleCode] = useState('');
   const [battleEnteryFee, setbattleEnteryFee] = useState<number>(Number(amount));
   const { walletBalnceState } = useAppSelector(store => store.features);
 
   async function handleCreateBattle() {
-    if(walletBalnceState?.balance && walletBalnceState.balance >= amount){
-      const resp = await createBattleApi({entryFee: amount, battleCode: battleCode, balanceToCut: Number(amount)});
-      console.log({ resp });
-      if(resp.length === 0) return;
-      nav(`/result/?id=${resp?.battle?.battle?._id}`);
+    try {
+      setloading(true);
+      if(walletBalnceState?.balance && walletBalnceState.balance >= amount){
+        await checkBattleSessionApi();
+        const resp = await createBattleApi({entryFee: amount, battleCode: battleCode});
+        setloading(false);
+        if(resp.length === 0) return;
+        nav(`/result/?id=${resp?.battle?.battle?._id}&battleCode=${resp?.battle?.battle?.battleCode}`);
+      }
+    } catch (error) {
+      setloading(false);
+      console.error({error});
+      
     }
   }
   useEffect(() => {
@@ -71,7 +80,7 @@ const SetBattle = () => {
             disabled={!(!!battleEnteryFee || !!battleCode)}
             onClick={() => handleCreateBattle()}
             className="text-white bg-blue-700 w-full hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-              Submit and Create
+              {loading ? '...loading' : 'Submit and Create'}
           </button>
       </div>
     </div>

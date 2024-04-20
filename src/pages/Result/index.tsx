@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import CancleModal from './cancleModal';
-import { fetchBattleById } from '../../api/battle';
+import { fetchBattleById, updateBattleApi } from '../../api/battle';
+import { fetchWalletApi } from '../../api/wallet';
+import { useAppDispatch } from '../../app/hooks';
+import { setWalletBalnceState } from '../../features/globalConfigs/global-slice';
+import { useNavigate } from 'react-router-dom';
 
 const Result = () => {
     const [waiting, setWaiting] = useState(true);
@@ -9,15 +13,31 @@ const Result = () => {
     const urlParams = new URLSearchParams(queryString);
     const battleId = urlParams.get('id') || '';
     const [battleCode, setbattleCode] = useState(urlParams.get('battleCode'))
-    
+    const dispatch = useAppDispatch();
     function handleSelectedResult(state: string){
         setSelectedResult(state);
     }
+    const nav = useNavigate();
     async function checkBattleStatus() {
         const resp = await fetchBattleById(battleId);
         if(resp?.battle && !!(resp?.battle?.battleOpenentId))
             setWaiting(false);
     }
+    async function handleSubmitResult() {
+        let requiedBody = {};
+        if(selectedResult === 'won'){
+            requiedBody = {result: selectedResult}
+        } else if(selectedResult === 'loose'){
+            requiedBody = {result: selectedResult}
+        } else if (selectedResult === 'cancelled'){
+            requiedBody = {result: selectedResult}
+        }
+        await updateBattleApi(battleId,{...requiedBody});
+        const walletResp = await fetchWalletApi();
+        dispatch(setWalletBalnceState(walletResp?.wallet)); 
+        nav('/home');
+    }
+
     useEffect(() => {
         checkBattleStatus();
     }, [queryString]);
@@ -75,12 +95,12 @@ const Result = () => {
                                 </div>
                             </div>
                             
-                            <div onClick={() => handleSelectedResult('cancle')} className='flex w-32 justify-center items-center gap-2 rounded border bg-white px-4 py-3 border-solid border-[#111]'>
+                            <div onClick={() => handleSelectedResult('cancelled')} className='flex w-32 justify-center items-center gap-2 rounded border bg-white px-4 py-3 border-solid border-[#111]'>
                                 <div className='text-[#111] text-sm font-medium leading-5'>
                                     Cancle
                                 </div>
                             </div>
-                            <div onClick={() => handleSelectedResult('loss')} className='flex w-32 justify-center items-center gap-2 rounded border bg-white px-4 py-3 border-solid border-[#E30000]'>
+                            <div onClick={() => handleSelectedResult('loose')} className='flex w-32 justify-center items-center gap-2 rounded border bg-white px-4 py-3 border-solid border-[#E30000]'>
                                 <div className='text-[#E30000] text-sm font-medium leading-5'>
                                     I LOST
                                 </div>
@@ -90,11 +110,11 @@ const Result = () => {
 
                             <div className="flex flex-col p-2">
                                 {
-                                    selectedResult === 'cancle' ?
+                                    selectedResult === 'cancelled' ?
                                     <CancleModal />
                                     :
                                     (
-                                        selectedResult === 'loss' 
+                                        selectedResult === 'loose' 
                                         ?
                                         <div className="text-md">Are you sure, you are loss the battle.</div> 
                                         :
@@ -106,7 +126,11 @@ const Result = () => {
                             </div>
 
                             <div className="flex justify-between">
-                                <button type="button" className="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800">
+                                <button 
+                                    onClick={handleSubmitResult}
+                                    type="button" 
+                                    className="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800"
+                                >
                                     Confirm
                                 </button>
                                 <button

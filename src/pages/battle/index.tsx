@@ -36,11 +36,9 @@ const Battle = () => {
           
     }
     async function joinBattleAsOpponent(battle:any) {
-        console.log({battle});
-        
         const resp = await updateBattleApi(battle._id, {status: 'live'})
-        console.log({resp});
-        
+        if(resp.length === 0) return;
+        nav(`/result/?id=${battle?._id}&battleCode=${battle?.battleCode}`);
     }
     useEffect(() => {
       fetchBattleFunction();

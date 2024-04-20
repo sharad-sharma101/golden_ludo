@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-    baseURL: 'http://localhost:8080/api/v1/', // Your API base URL
+    baseURL: 'https://golden-ludo-backend.onrender.com/api/v1/', // Your API base URL
 	withCredentials: true,
     headers: {
       'Content-Type': 'application/json',

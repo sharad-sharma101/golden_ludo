@@ -1,44 +1,44 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import HistoryCard from '../../../component/HistoryCard'
 import { VSLogo } from '../../../helper/icons'
 import Avatar from 'react-avatar'
+import { fetchBattlesApi, updateBattleApi } from '../../../api/battle'
+import { useAppSelector } from '../../../app/hooks'
 
 const GameHistory = () => {
-
-    const OngoingBattle = [
-        {
-            gameCreator: "sharad.dev",
-            gameReciver: "vastu994",
-            Fees: 1200,
-            prize: 2300,
-            result: 'WIN'
-        },
-        {
-            gameCreator: "sharad.dev",
-            gameReciver: "coco@jo",
-            Fees: 500,
-            prize: 950,
-            result: 'LOSS'
-        },
-        {
-            gameCreator: "sharad.dev",
-            gameReciver: "rahul_t94",
-            Fees: 1200,
-            prize: 2300,
-            result: 'WIN'
-        },
-        {
-            gameCreator: "sharad.dev",
-            gameReciver: "vastu994",
-            Fees: 1000,
-            prize: 1800,
-            result: 'WIN'
-        },
-    ]
-
-    const CardBody = ({game}: any) => {
-        return (
-            <div className='inline-flex justify-around items-center w-full' >
+    const [OngoingBattle, setOngoingBattle] = useState<any[]>([])
+    const {userObjectState} = useAppSelector(store => store.features);
+    
+    async function fetchBattleHistory() {
+        if(Object.keys(userObjectState).length === 0) return;
+        const createdByUser = await fetchBattlesApi(`battleCreatorId=${userObjectState._id}&forHistory=${true}`);
+        const userAsOpponent = await fetchBattlesApi(`battleOpenentId=${userObjectState._id}&forHistory=${true}`);
+        if(createdByUser?.results || userAsOpponent?.results){
+            const newHist: any[] = createdByUser.results.map((hist: any) => {
+                return {
+                    gameCreator: hist?.battleCreatorId?.name,
+                    gameReciver: hist?.battleOpenentId?.name,
+                    Fees: hist?.entryFee,
+                    prize: hist?.prizeAmount,
+                    result: hist?.moneyDistributed ? 'Declear' : 'Undeclear'
+                }
+            })
+            const newHists: any[] = userAsOpponent.results.map((hist: any) => {
+                return {
+                    gameCreator: hist?.battleCreatorId?.name,
+                    gameReciver: hist?.battleOpenentId?.name,
+                    Fees: hist?.entryFee,
+                    prize: hist?.prizeAmount,
+                    result: hist?.moneyDistributed ? 'Declear' : 'Undeclear'
+                }
+            })
+            setOngoingBattle([...newHists, ...newHist]);
+        }
+    }
+        
+        const CardBody = ({game}: any) => {
+            return (
+                <div className='inline-flex justify-around items-center w-full' >
                 <div className='flex flex-col items-center gap-1' >
                     <p className='grey-font-color text-xs leading-5 avtar-cover' >
                         <Avatar size="32" round={true} name={game.gameCreator} />
@@ -86,6 +86,12 @@ const GameHistory = () => {
             </div>
         )
     }
+
+    
+    useEffect(() => {
+        fetchBattleHistory();
+    }, [userObjectState])
+    
 
     return (
         <div className='inline-flex w-full flex-col items-start gap-6 shrink-0' >
