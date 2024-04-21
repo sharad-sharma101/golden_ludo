@@ -6,7 +6,7 @@ import "./index.scss";
 import Avatar from 'react-avatar';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useNavigate } from 'react-router-dom';
-import { fetchBattlesApi, updateBattleApi } from '../../api/battle';
+import { checkBattleSessionApi, fetchBattlesApi, updateBattleApi } from '../../api/battle';
 import { toast } from 'react-toastify';
 
 const Battle = () => {
@@ -57,7 +57,17 @@ const Battle = () => {
         }          
     }
     async function joinBattleAsOpponent(battle:any) {
-        setJoinLoadingState(battle._id);        
+        setJoinLoadingState(battle._id);
+        const tot = await checkBattleSessionApi();
+        
+        if(tot.length === 0){
+          toast.warning("Currently your game is still running", {
+            position: "top-center",
+            autoClose: 2000,
+         });
+         setJoinLoadingState('');
+         return;
+        }        
         const resp = await updateBattleApi(battle._id, {status: 'live'})
         if(resp.length === 0) {
             toast.error("Not able to join", {

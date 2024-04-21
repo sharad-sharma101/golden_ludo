@@ -24,9 +24,9 @@ const SetBattle = () => {
             position: "top-center",
             autoClose: 2000,
          });
-         return;
          setloading(false);
-        } 
+         return;
+        }
         const resp = await createBattleApi({entryFee: amount, battleCode: battleCode });
         setloading(false);
         nav(`/result/?id=${resp?.battle?.battle?._id}&battleCode=${resp?.battle?.battle?.battleCode}`);
