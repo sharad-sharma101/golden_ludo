@@ -18,15 +18,17 @@ const SetBattle = () => {
       setloading(true);
       if(walletBalnceState?.balance && walletBalnceState.balance >= amount){
         const tot = await checkBattleSessionApi();
+        
         if(tot.length === 0){
-          toast.warning("Currently our game is still running", {
+          toast.warning("Currently your game is still running", {
             position: "top-center",
             autoClose: 2000,
          });
+         return;
+         setloading(false);
         } 
         const resp = await createBattleApi({entryFee: amount, battleCode: battleCode });
         setloading(false);
-        if(resp.length === 0) return;
         nav(`/result/?id=${resp?.battle?.battle?._id}&battleCode=${resp?.battle?.battle?.battleCode}`);
       }
     } catch (error) {
