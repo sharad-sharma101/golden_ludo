@@ -42,18 +42,19 @@ const Battle = () => {
           if(openBattles?.results && openBattles.results.length) setOpenMatchs(openBattles.results);
           if(pendingBattles?.results && pendingBattles.results.length) {
             let updatedMatch = [ ...(pendingBattles.results) ]
-            const index = updatedMatch.findIndex((obj: any) => obj.battleCreatorId._id == userObjectState._id);
-            if (index !== -1) {
-                updatedMatch.unshift(updatedMatch.splice(index, 1)[0]);
-                setLiveMatchs(updatedMatch);
-                return 
-            }
-            const index2 = updatedMatch.findIndex((obj: any) => obj.battleOpenentId._id == userObjectState._id);
-            if (index2 !== -1) {
-                updatedMatch.unshift(updatedMatch.splice(index, 1)[0]);
-                setLiveMatchs(updatedMatch);
-                return 
-            }
+            // const index = updatedMatch.findIndex((obj: any) => obj.battleCreatorId._id == userObjectState._id);
+            // if (index !== -1) {
+            //     updatedMatch.unshift(updatedMatch.splice(index, 1)[0]);
+            //     setLiveMatchs(updatedMatch);
+            //     return 
+            // }
+            // const index2 = updatedMatch.findIndex((obj: any) => obj.battleOpenentId._id == userObjectState._id);
+            // if (index2 !== -1) {
+            //     updatedMatch.unshift(updatedMatch.splice(index, 1)[0]);
+            //     setLiveMatchs(updatedMatch);
+            //     return 
+            // }
+            setLiveMatchs(updatedMatch);
         }          
     }
     async function joinBattleAsOpponent(battle:any) {
