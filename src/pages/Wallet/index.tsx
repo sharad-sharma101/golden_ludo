@@ -3,6 +3,7 @@ import walletKyc from "../../assets/wallet-kyc-banner.svg";
 import { updateWalletApi } from '../../api/wallet';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setWalletBalnceState } from '../../features/globalConfigs/global-slice';
+import { toast } from 'react-toastify';
 
 const Wallet = () => {
     const [addedAmount, setaddedAmount] = useState<number>();
@@ -12,6 +13,11 @@ const Wallet = () => {
         {money: "₹500"},
         {money: "₹1000"},
     ]
+    const showToastMessage = ({msg}: any) => {
+        toast.success(msg, {
+          position: "top-center",
+        });
+      };
     const dispatch = useAppDispatch();
     const { walletBalnceState } = useAppSelector(store => store.features);
     function handleClickTags(index: number) {
@@ -20,9 +26,10 @@ const Wallet = () => {
         setaddedAmount(amount)
     }
     async function handleAddedAmount (){
-        await updateWalletApi({balanceToAdd: Number(addedAmount)});
+        const resp = await updateWalletApi({balanceToAdd: Number(addedAmount)});
         const updatedBalance = walletBalnceState?.balance + addedAmount;
-        dispatch(setWalletBalnceState({...walletBalnceState, balance: Number(updatedBalance) }))
+        dispatch(setWalletBalnceState({...walletBalnceState, balance: Number(updatedBalance) }));
+        showToastMessage({msg: resp.message});
         setaddedAmount(0);
     }
   return (

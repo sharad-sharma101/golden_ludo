@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { checkBattleSessionApi, createBattleApi } from '../../api/battle';
 import { useAppSelector } from '../../app/hooks';
+import { toast } from 'react-toastify';
 
 const SetBattle = () => {
   const nav = useNavigate();
@@ -16,8 +17,14 @@ const SetBattle = () => {
     try {
       setloading(true);
       if(walletBalnceState?.balance && walletBalnceState.balance >= amount){
-        await checkBattleSessionApi();
-        const resp = await createBattleApi({entryFee: amount, battleCode: battleCode});
+        const tot = await checkBattleSessionApi();
+        if(tot.length === 0){
+          toast.warning("Currently our game is still running", {
+            position: "top-center",
+            autoClose: 2000,
+         });
+        } 
+        const resp = await createBattleApi({entryFee: amount, battleCode: battleCode });
         setloading(false);
         if(resp.length === 0) return;
         nav(`/result/?id=${resp?.battle?.battle?._id}&battleCode=${resp?.battle?.battle?.battleCode}`);

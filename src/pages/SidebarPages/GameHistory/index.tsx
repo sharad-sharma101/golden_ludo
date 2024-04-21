@@ -11,8 +11,8 @@ const GameHistory = () => {
     
     async function fetchBattleHistory() {
         if(Object.keys(userObjectState).length === 0) return;
-        const createdByUser = await fetchBattlesApi(`battleCreatorId=${userObjectState._id}&forHistory=${true}`);
-        const userAsOpponent = await fetchBattlesApi(`battleOpenentId=${userObjectState._id}&forHistory=${true}`);
+        const createdByUser = await fetchBattlesApi(`battleCreatorId=${userObjectState._id}&forHistory=${true}&moneyDistributed=${true}`);
+        const userAsOpponent = await fetchBattlesApi(`battleOpenentId=${userObjectState._id}&forHistory=${true}&moneyDistributed=${true}`);
         if(createdByUser?.results || userAsOpponent?.results){
             const newHist: any[] = createdByUser.results.map((hist: any) => {
                 return {
